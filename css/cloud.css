@@ -1,0 +1,125 @@
+#clouds {
+    z-index: -1 !important;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    overflow: hidden;
+}
+
+.cloud {
+    position: absolute;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    animation-iteration-count: infinite;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+    animation-name: Float, FadeFloat;
+}
+
+.cloud-1 {
+    animation-duration: 60s;
+}
+
+.cloud-2 {
+    animation-duration: 200s;
+}
+
+.cloud-3 {
+    animation-duration: 80s;
+}
+
+.cloud-4 {
+    animation-duration: 170s;
+}
+
+.cloud-5 {
+    animation-duration: 100s;
+}
+
+.cloud-6 {
+    animation-duration: 110s;
+}
+
+.cloud-7 {
+    animation-duration: 120s;
+}
+
+.cloud-8 {
+    animation-duration: 90s;
+}
+
+.cloud-9 {
+    animation-duration: 140s;
+}
+
+.cloud-l2 {
+    left: 800px;
+}
+
+.cloud-a {
+    top: 25%;
+}
+
+.cloud-b {
+    top: 50%;
+}
+
+.cloud-c {
+    top: 75%;
+}
+
+.cloud-white {
+    background-image: url("https://raw.githubusercontent.com/mazzetticapital/imprendi_static/master/images/cloud_white.svg");
+}
+
+.cloud-small {
+    height: 64px;
+    background-size: contain;
+}
+
+.cloud-medium {
+    height: 128px;
+    background-size: contain;
+}
+
+.cloud-big {
+    height: 256px;
+    background-size: contain;
+}
+
+.cloud-top {
+    z-index: -1;
+}
+
+.cloud-middle {
+    z-index: -2;
+}
+
+.cloud-bottom {
+    z-index: -3;
+}
+
+@keyframes Float {
+    from {
+        transform: translateX(100%) translateZ(0);
+    }
+    to {
+        transform: translateX(-15%) translateZ(0);
+    }
+}
+
+@keyframes FadeFloat {
+    0%,
+    100% {
+        opacity: 0;
+    }
+    5%,
+    90% {
+        opacity: 1;
+    }
+}
