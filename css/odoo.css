@@ -1,0 +1,53 @@
+/* PALETTE dei COLORI */
+
+h1, h2, h3, h4, h5, h6, p, span  { 
+    color:#282F33; 
+    background: #F9F9F9; 
+}
+
+.bg-light { background:#F9F9F9 !important; }
+
+.text-primary {
+    color: #875A7B !important;
+}
+
+.bg-primary {
+    color: white !important;
+    background: #875A7B !important;
+}
+
+.border-primary {
+    border-color: #875A7B !important;
+}
+
+.btn-primary {
+    color: white !important;
+    background: #875A7B !important;
+    border-color: #875A7B !important;
+}
+
+.text-secondary, a {
+    color: #00A09D !important;
+}
+
+.bg-secondary {
+    background: #00A09D !important;
+}
+
+.border-secondary {
+    border-color: #00A09D !important;
+}
+
+.btn-secondary {
+    color: white !important;
+    background: #00A09D !important;
+    border-color: #00A09D !important;
+}
+
+.cloud-primary {
+    background-image: url("/static/img/odoo_cloud_primary.svg");
+}
+
+.cloud-secondary {
+    background-image: url("/static/img/odoo_cloud_secondary.svg");
+}

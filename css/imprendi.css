@@ -1,0 +1,55 @@
+/* PALETTE dei COLORI */
+
+h1, h2, h3, h4, h5, h6, p, span { 
+    color:#263238; 
+    background: #eceff1; 
+}
+
+.bg-light { 
+    background:#eceff1 !important;
+}
+
+.text-primary {
+    color: #455a64 !important;
+}
+
+.bg-primary {
+    color: white !important;
+    background: #455a64 !important;
+}
+
+.border-primary {
+    border-color: #455a64 !important;
+}
+
+.btn-primary {
+    color: white !important;
+    background: #455a64 !important;
+    border-color: #455a64 !important;
+}
+
+.text-secondary, a {
+    color: #ffa000 !important;
+}
+
+.bg-secondary {
+    background: #ffa000 !important;
+}
+
+.border-secondary {
+    border-color: #ffa000 !important;
+}
+
+.btn-secondary {
+    color: #263238 !important;
+    background: #ffa000 !important;
+    border-color: #ffa000 !important;
+}
+
+.cloud-primary {
+    background-image: url("/static/img/cloud_primary.svg");
+}
+
+.cloud-secondary {
+    background-image: url("/static/img/cloud_secondary.svg");
+}
