@@ -1,0 +1,134 @@
+if (window.rcmail){
+  rcmail.addEventListener('plugin.edit_do_ok', pop3fetcher_edit_do_ok);
+  rcmail.addEventListener('plugin.add_do_ok', pop3fetcher_add_do_ok);
+  rcmail.addEventListener('plugin.delete_do_ok', pop3fetcher_delete_do_ok);
+  rcmail.addEventListener('plugin.edit_do_error_connecting', pop3fetcher_edit_do_error_connecting);
+  rcmail.addEventListener('plugin.add_do_error_connecting', pop3fetcher_add_do_error_connecting);
+  rcmail.register_command('add-pop3fetcher', pop3fetcher_add, true);
+  rcmail.register_command('delete-pop3fetcher', pop3fetcher_delete, false);
+}
+  
+function pop3fetcher_add() {
+  var target = window.frames[rcmail.env.contentframe];
+  rcmail.enable_command('delete-pop3fetcher', false);
+  $('ul.listing.pop3fetcher').removeClass('selected');
+  var lock = rcmail.set_busy(true, 'loading');
+  target.location.href = '/?_task=settings&_action=plugin.pop3fetcher&_add=1&_framed=1&_unlock=' + lock;
+};
+
+function pop3fetcher_delete() {
+  var target = window.frames[rcmail.env.contentframe];
+  var uid = $('ul.listing.pop3fetcher li.selected a').attr('pop3id');
+  if (uid) {
+    pop3fetcher_delete_do(this, uid);
+  }
+};
+
+function pop3fetcher_edit_do(){
+	var params = {  '_edit_do': '1',
+					'_pop3fetcher_id': $("#pop3fetcher_id").val(),
+					'_pop3fetcher_email': $("#pop3fetcher_email").val(),
+					'_pop3fetcher_username': $("#pop3fetcher_username").val(),
+					'_pop3fetcher_password': $("#pop3fetcher_password").val(),
+					'_pop3fetcher_provider': $("#pop3fetcher_provider").val(),
+					'_pop3fetcher_serveraddress': $("#pop3fetcher_serveraddress").val(),
+					'_pop3fetcher_serverport': $("#pop3fetcher_serverport").val(),
+					'_pop3fetcher_ssl': $("#pop3fetcher_ssl").val(),
+					'_pop3fetcher_leaveacopy': $("#pop3fetcher_leaveacopy").is(":checked"),
+					'_pop3fetcher_testconnection': $("#pop3fetcher_testconnection").is(":checked"),
+					'_pop3fetcher_defaultfolder': $("#pop3fetcher_defaultfolder").val()
+	};
+  var lock = rcmail.set_busy(true, 'loading');
+	rcmail.http_post('plugin.pop3fetcher', params, lock);
+}
+
+function pop3fetcher_edit_do_ok(){
+  rcmail.display_message('updated','confirmation');
+  window.parent.rcmail.show_contentframe();
+	//window.location='?_task=settings&_action=edit-prefs&_section=plugin.pop3fetcher_list&_framed=1';
+}
+
+function pop3fetcher_edit_do_error_connecting(){
+  rcmail.display_message(rcmail.gettext('pop3fetcher.account_unableconnect')+" "+$("#pop3fetcher_serveraddress").val()+":"+$("#pop3fetcher_serverport").val(),'error');
+}
+
+function pop3fetcher_add_do(){
+	var params = {  '_add_do': '1',
+					'_pop3fetcher_id': $("#pop3fetcher_id").val(),
+					'_pop3fetcher_email': $("#pop3fetcher_email").val(),
+					'_pop3fetcher_username': $("#pop3fetcher_username").val(),
+					'_pop3fetcher_password': $("#pop3fetcher_password").val(),
+					'_pop3fetcher_provider': $("#pop3fetcher_provider").val(),
+					'_pop3fetcher_serveraddress': $("#pop3fetcher_serveraddress").val(),
+					'_pop3fetcher_serverport': $("#pop3fetcher_serverport").val(),
+					'_pop3fetcher_ssl': $("#pop3fetcher_ssl").val(),
+					'_pop3fetcher_leaveacopy': $("#pop3fetcher_leaveacopy").is(":checked"),
+					'_pop3fetcher_testconnection': $("#pop3fetcher_testconnection").is(":checked"),
+					'_pop3fetcher_import_old_messages': $("#pop3fetcher_import_old_messages").is(":checked"),
+					'_pop3fetcher_defaultfolder': $("#pop3fetcher_defaultfolder").val()
+	};
+  var lock = rcmail.set_busy(true, 'loading');
+	rcmail.http_post('plugin.pop3fetcher', params, lock);
+}
+
+function pop3fetcher_add_do_ok(args){
+  if (args && args['status'] == 'already exists') {
+    rcmail.display_message('already exists','error');
+  } else if (args && args['status'] == 'internal failure') {
+    rcmail.display_message('internal error','error');
+  } else {
+    window.parent.$('#pop3fetcher_list').append('<li><a href="#" pop3id="'+args.uid+'">'+args.email+'</a></li>');
+    rcmail.display_message('added','confirmation');
+    window.parent.rcmail.show_contentframe();
+  }
+}
+
+function pop3fetcher_add_do_error_connecting(){
+	$(".button.pop3fetcher").show();
+	$("#btn_edit_do_loader").hide();
+	$("#btn_add_do_loader").hide();
+	alert(rcmail.gettext('pop3fetcher.account_unableconnect')+" "+$("#pop3fetcher_serveraddress").val()+":"+$("#pop3fetcher_serverport").val());
+}
+
+function pop3fetcher_delete_do(element, id){
+	$(element).parents("tr").addClass("to_be_removed");
+	var params = {  '_delete_do': '1',
+					'_pop3fetcher_id': id
+	};
+  var lock = rcmail.set_busy(true, 'loading');
+	rcmail.http_post('plugin.pop3fetcher', params, lock);
+}
+
+function pop3fetcher_delete_do_ok(args){
+  $('#pop3fetcher_list a[pop3id='+args.uid+']').parent().remove();
+  rcmail.display_message('deleted','confirmation');
+  rcmail.show_contentframe();
+}
+
+function load_pop3_providers(cur_selected_provider){
+	$.each(providers, function(item){
+		if(item==cur_selected_provider)
+			$("#pop3fetcher_provider").append('<option value="'+item+'" selected>'+item+'</option>');
+		else
+			$("#pop3fetcher_provider").append('<option value="'+item+'">'+item+'</option>');
+	});
+	$("#pop3fetcher_provider").change(
+		function(){
+			
+			$("#pop3fetcher_serveraddress").val(providers[this.value].serveraddress);
+			$("#pop3fetcher_serverport").val(providers[this.value].serverport);
+			$("#pop3fetcher_ssl option[value='"+providers[this.value].ssl+"']").attr("selected", "true");
+		}
+	);
+}
+
+function update_default_folder_name(name){
+	if(name==""){
+		$("#pop3fetcher_defaultfolder").find('option[value|="#AUTO_FOLDER#"]').remove();
+	} else {
+		if($("#pop3fetcher_defaultfolder").find('option[value|="#AUTO_FOLDER#"]').length==0)
+			$("#pop3fetcher_defaultfolder").append('<option value="#AUTO_FOLDER#">'+name+'</option>');
+		else
+			$("#pop3fetcher_defaultfolder").find('option[value|="#AUTO_FOLDER#"]').html(name);
+	}
+}

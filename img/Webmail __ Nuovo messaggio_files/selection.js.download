@@ -1,0 +1,4 @@
+rcmail.addEventListener('plugin.selection_force', selection_force);
+function selection_force(response) {
+  $('#messagelist').addClass('withselection');
+}
